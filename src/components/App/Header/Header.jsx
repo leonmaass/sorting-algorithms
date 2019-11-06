@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Box, Button, Menu, Text, RangeInput } from 'grommet';
+import { Box, Button, Menu, RangeInput } from 'grommet';
 
 class Header extends Component {
 	render() {
@@ -8,7 +8,9 @@ class Header extends Component {
 			updateSortingAlgorithm,
 			arraySize,
 			sortingAlgorithm,
-			generateNewArray
+			generateNewArray,
+			startSorting,
+			sorting
 		} = this.props;
 		return (
 			<Box
@@ -26,19 +28,35 @@ class Header extends Component {
 					fill="horizontal"
 				>
 					<Box>
-						<Button label="Generate New Array" onClick={generateNewArray}/>
+						<Button
+							label="Generate New Array"
+							onClick={generateNewArray}
+							disabled={sorting}
+						/>
 					</Box>
 					<Box direction="row" gap="small" align="center">
-						<Text>Size</Text>
+						<Button
+							disabled={sorting}
+							style={{ cursor: 'default' }}
+						>
+							Size
+						</Button>
 						<RangeInput
 							value={arraySize}
 							onChange={updateArraySize}
 							min="5"
+							disabled={sorting}
+							style={
+								sorting
+									? { opacity: '0.3', cursor: 'default' }
+									: { opacity: '1', cursor: 'pointer' }
+							}
 						/>
 					</Box>
 					<Box align="center" width="162px">
 						<Menu
 							label={sortingAlgorithm}
+							disabled={sorting}
 							items={[
 								{
 									label: 'Merge Sort',
@@ -61,7 +79,13 @@ class Header extends Component {
 					</Box>
 				</Box>
 				<Box width="110px" margin={{ right: 'large' }}>
-					<Button textAlign="center" label="Start" primary/>
+					<Button
+						textAlign="center"
+						label="Start"
+						primary
+						onClick={startSorting}
+						disabled={sorting}
+					/>
 				</Box>
 			</Box>
 		);
