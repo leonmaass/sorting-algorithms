@@ -45,6 +45,8 @@ class Header extends Component {
 							value={arraySize}
 							onChange={updateArraySize}
 							min="5"
+							max="100"
+							step={5}
 							disabled={sorting}
 							style={
 								sorting
