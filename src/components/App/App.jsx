@@ -24,7 +24,7 @@ const theme = {
 class App extends Component {
 	state = {
 		arraySize: 50,
-		sortingAlgorithm: 'Merge Sort',
+		sortingAlgorithm: 'Heap Sort',
 		arrayValues: [],
 		sorting: false
 	};
@@ -62,46 +62,74 @@ class App extends Component {
 
 	// HEAP SORT ALGORITHM
 
-	siftDown = (arr, start, end, animation) => {
-		var root = start,
-			child = root * 2 + 1,
-			toSwap = root;
-		while (child <= end) {
-			if (arr[toSwap] < arr[child]) {
-				this.swap(arr, toSwap, child);
-			}
-			if (child + 1 <= end && arr[toSwap] < arr[child + 1]) {
-				this.swap(arr, toSwap, child + 1);
-			}
-			if (toSwap !== root) {
-				this.swap(arr, root, toSwap);
-				root = toSwap;
-			} else {
-				return;
-			}
-			toSwap = root;
-			child = root * 2 + 1;
-		}
-	};
+	heapify = (arr, len, i, animation) => {
+		let largest = i;
+		let left = i * 2 + 1;
+		let right = left + 1;
 
-	heapify = (arr, len, animation) => {
-		// break the array into root + two sides, to create tree (heap)
-		var mid = Math.floor((len - 2) / 2);
-		while (mid >= 0) {
-			this.shiftDown(arr, mid--, len - 1);
+		if (left < len) {
+			// comparison add
+			animation.push(['#FF4040', largest, 'c']);
+			animation.push(['#FF4040', left, 'c']);
+			if (arr[left] > arr[largest]) {
+				// comparison success
+				animation.push(['#6FFFB0', largest, 'c']);
+				animation.push(['#6FFFB0', left, 'c']);
+				// comparison success remove
+				animation.push(['#B578E8', largest, 'c']);
+				animation.push(['#B578E8', left, 'c']);
+				largest = left;
+			}
+			// comparison remove
+			animation.push(['#B578E8', largest, 'c']);
+			animation.push(['#B578E8', left, 'c']);
 		}
+
+		if (right < len) {
+			// comparison add
+			animation.push(['#FF4040', largest, 'c']);
+			animation.push(['#FF4040', right, 'c']);
+			if (arr[right] > arr[largest]) {
+				// comparison success
+				animation.push(['#6FFFB0', largest, 'c']);
+				animation.push(['#6FFFB0', right, 'c']);
+				// comparison success remove
+				animation.push(['#B578E8', largest, 'c']);
+				animation.push(['#B578E8', right, 'c']);
+				largest = right;
+			}
+			// comparison remove
+			animation.push(['#B578E8', largest, 'c']);
+			animation.push(['#B578E8', right, 'c']);
+		}
+
+		if (largest !== i) {
+			// swap
+			this.swap(arr, i, largest, animation);
+			this.heapify(arr, len, largest, animation);
+		}
+
+		return arr;
 	};
 
 	heapSort = (arr, animation) => {
-		var len = arr.length,
-			end = len - 1;
+		let len = arr.length;
+		let i = Math.floor(len / 2 - 1);
+		let k = len - 1;
 
-		this.heapify(arr, len);
-
-		while (end > 0) {
-			this.propsswap(arr, end--, 0);
-			this.shiftDown(arr, 0, end);
+		while (i >= 0) {
+			this.heapify(arr, len, i, animation);
+			i--;
 		}
+
+		while (k >= 0) {
+			//swap
+			this.swap(arr, 0, k, animation);
+			animation.push(['#6399F1', k, 'c']);
+			this.heapify(arr, k, 0, animation);
+			k--;
+		}
+
 		return arr;
 	};
 
@@ -256,7 +284,6 @@ class App extends Component {
 				barStyle = document.getElementsByClassName('array-bar')[barId]
 					.style,
 				isLastIteration = i === animation.length - 1 ? true : false;
-
 			if (animationType === 'c') {
 				setTimeout(() => {
 					barStyle.backgroundColor = value;
@@ -286,6 +313,8 @@ class App extends Component {
 		} else if (this.state.sortingAlgorithm === 'Merge Sort') {
 			let auxiliaryArray = arr.slice();
 			this.mergeSort(arr, 0, arr.length - 1, auxiliaryArray, animation);
+		} else if (this.state.sortingAlgorithm === 'Heap Sort') {
+			this.heapSort(arr, animation);
 		}
 
 		arr.forEach((value, id) => {
