@@ -29,11 +29,14 @@ class App extends Component {
 			arraySize: 50,
 			sortingAlgorithm: 'Bubble Sort',
 			arrayValues: [],
-			sorting: false
+			sorting: false,
+			barWidth: 3,
+			barMargin: 1.5
 		};
 	}
 
 	componentDidMount() {
+		// todo calculate animation speed
 		this.generateNewArray();
 	}
 
@@ -48,8 +51,16 @@ class App extends Component {
 	};
 
 	generateNewArray = () => {
-		let arrayValues = [],
+		const arrayValues = [],
 			bars = document.getElementsByClassName('array-bar');
+		const containerWidth = document.getElementById('chartBox').offsetWidth,
+			barWidth =
+				Math.floor(containerWidth / this.state.arraySize - 3) / 2;
+		let barMargin = barWidth / 2;
+		if (barMargin > 1.5) {
+			barMargin = 1.5;
+		}
+		this.setState({ barWidth: barWidth, barMargin: barMargin });
 		for (let i = 0; i < this.state.arraySize; i++) {
 			arrayValues.push(
 				100 + 5 * Math.floor(Math.random() * Math.floor(100))
@@ -62,6 +73,17 @@ class App extends Component {
 		this.setState({
 			arrayValues: arrayValues
 		});
+	};
+
+	// HELPER FUNCTION
+
+	swap = (arr, i, j, animation) => {
+		const temp = arr[i];
+		// animate swap
+		animation.push([arr[j], i, 'cV']);
+		animation.push([temp, j, 'cV']);
+		arr[i] = arr[j];
+		arr[j] = temp;
 	};
 
 	// BUBBLE SORT ALGORITHM
@@ -250,15 +272,6 @@ class App extends Component {
 
 	// QUICK SORT ALGORITHM
 
-	swap = (arr, i, j, animation) => {
-		const temp = arr[i];
-		// animate swap
-		animation.push([arr[j], i, 'cV']);
-		animation.push([temp, j, 'cV']);
-		arr[i] = arr[j];
-		arr[j] = temp;
-	};
-
 	partition = (arr, pivot, left, right, animation) => {
 		let pivotValue = arr[pivot],
 			partitionIndex = left;
@@ -374,13 +387,14 @@ class App extends Component {
 					justify="center"
 					margin={{ horizontal: 'xlarge', top: 'medium' }}
 					direction="row"
+					id="chartBox"
 					//align="center"
 				>
 					{this.state.arrayValues.map((value, position) => (
 						<Box
 							key={position}
-							width="3px"
-							margin="1.5px"
+							width={`${this.state.barWidth}px`}
+							margin={`${this.state.barMargin}px`}
 							style={{
 								height: `${value}px`
 							}}

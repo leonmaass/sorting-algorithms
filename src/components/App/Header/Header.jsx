@@ -44,7 +44,7 @@ class Header extends Component {
 						<RangeInput
 							value={arraySize}
 							onChange={updateArraySize}
-							min="1"
+							min="5"
 							max="100"
 							step={1}
 							disabled={sorting}
