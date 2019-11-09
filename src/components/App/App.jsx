@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Box, Grommet } from 'grommet';
 import Header from './Header';
 
-// change this value for the speed of the animation
-const ANIMATION_SPEED_MS = 1;
+// change this value for the speed of the animation in seconds
+const ANIMATION_SPEED_S = 5;
 const theme = {
 	global: {
 		colors: {
@@ -69,7 +69,6 @@ class App extends Component {
 				bars[i].style.backgroundColor = '#B578E8';
 			}
 		}
-
 		this.setState({
 			arrayValues: arrayValues
 		});
@@ -323,6 +322,7 @@ class App extends Component {
 	// ANIMATE SORTING
 
 	animateSorting = animation => {
+		let animationSpeed = 1000 * ANIMATION_SPEED_S / animation.length;
 		for (let i = 0; i < animation.length; i++) {
 			const [value, barId, animationType] = animation[i],
 				barStyle = document.getElementsByClassName('array-bar')[barId]
@@ -331,17 +331,17 @@ class App extends Component {
 			if (animationType === 'c') {
 				setTimeout(() => {
 					barStyle.backgroundColor = value;
-				}, i * ANIMATION_SPEED_MS);
+				}, i * animationSpeed);
 			} else if (animationType === 'cV') {
 				setTimeout(() => {
 					barStyle.height = `${value}px`;
-				}, i * ANIMATION_SPEED_MS);
+				}, i * animationSpeed);
 			}
 
 			if (isLastIteration) {
 				setTimeout(() => {
 					this.setState({ sorting: false });
-				}, i * ANIMATION_SPEED_MS);
+				}, i * animationSpeed);
 			}
 		}
 	};
