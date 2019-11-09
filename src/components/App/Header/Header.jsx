@@ -18,14 +18,14 @@ class Header extends Component {
 				elevation="small"
 				direction="row"
 				align="center"
+				justify="center"
 			>
 				<Box
 					direction="row"
-					pad={{ vertical: 'small', left: 'large' }}
+					pad={{ vertical: 'small', horizontal: 'small' }}
 					gap="medium"
 					align="center"
 					height="72px"
-					fill="horizontal"
 				>
 					<Box>
 						<Button
@@ -79,8 +79,7 @@ class Header extends Component {
 							]}
 						/>
 					</Box>
-				</Box>
-				<Box width="110px" margin={{ right: 'large' }}>
+					<Box >
 					<Button
 						textAlign="center"
 						label="Start"
@@ -89,6 +88,8 @@ class Header extends Component {
 						disabled={sorting}
 					/>
 				</Box>
+				</Box>
+				
 			</Box>
 		);
 	}

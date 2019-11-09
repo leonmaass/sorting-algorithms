@@ -385,7 +385,7 @@ class App extends Component {
 				/>
 				<Box
 					justify="center"
-					margin={{ horizontal: 'xlarge', top: 'medium' }}
+					margin={{ horizontal: 'xlarge'/*, top: 'medium'*/ }}
 					direction="row"
 					id="chartBox"
 					//align="center"
