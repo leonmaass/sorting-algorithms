@@ -22,12 +22,16 @@ const theme = {
 };
 
 class App extends Component {
-	state = {
-		arraySize: 50,
-		sortingAlgorithm: 'Heap Sort',
-		arrayValues: [],
-		sorting: false
-	};
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			arraySize: 50,
+			sortingAlgorithm: 'Bubble Sort',
+			arrayValues: [],
+			sorting: false
+		};
+	}
 
 	componentDidMount() {
 		this.generateNewArray();
@@ -58,6 +62,33 @@ class App extends Component {
 		this.setState({
 			arrayValues: arrayValues
 		});
+	};
+
+	// BUBBLE SORT ALGORITHM
+
+	bubbleSort = (array, animation) => {
+		let length = array.length;
+		for (let k = length - 1; k >= 0; k--) {
+			for (let i = 1; i <= k; i++) {
+				// comparison add
+				animation.push(['#FF4040', i, 'c']);
+				animation.push(['#FF4040', i - 1, 'c']);
+				if (array[i] < array[i - 1]) {
+					// comparison success
+					animation.push(['#6FFFB0', i, 'c']);
+					animation.push(['#6FFFB0', i - 1, 'c']);
+					// comparison success remove
+					animation.push(['#B578E8', i, 'c']);
+					animation.push(['#B578E8', i - 1, 'c']);
+					this.swap(array, i, i - 1, animation);
+				}
+				// comparison remove
+				animation.push(['#B578E8', i, 'c']);
+				animation.push(['#B578E8', i - 1, 'c']);
+			}
+			animation.push(['#6399F1', k, 'c']);
+		}
+		return array;
 	};
 
 	// HEAP SORT ALGORITHM
@@ -315,6 +346,8 @@ class App extends Component {
 			this.mergeSort(arr, 0, arr.length - 1, auxiliaryArray, animation);
 		} else if (this.state.sortingAlgorithm === 'Heap Sort') {
 			this.heapSort(arr, animation);
+		} else if (this.state.sortingAlgorithm === 'Bubble Sort') {
+			this.bubbleSort(arr, animation);
 		}
 
 		arr.forEach((value, id) => {
